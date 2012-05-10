@@ -1,0 +1,36 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=4050
+
+website: https://github.com/michalliu/jsruntime.vim
+
+jsruntime.vim (Javascript runtime in Vim)
+It use PyV8 as javascript interpreter. if PyV8 not supported, it use node, cscript, spiderMonkey as fallbacks.
+
+Documentation
+It provide the following functions
+
+b:jsruntimeEvalScript({script}, {renew_context})
+
+:echo b:jsruntimeEvalScript('1+2')
+// output 3
+renew_context is a flag to indicate whether keep the context created by script before
+
+:call b:jsruntimeEvalScript('a=3')  // we create a context
+:echo b:jsruntimeEvalScript('a;') // we eval this script in context created before
+// output 1
+:echo b:jsruntimeEvalScript('a;',1) // we eval this script in new context
+// output undefined
+renew_context is not guaranteed support, if not support renew_context will always be 1.
+
+you can use b:jsruntime_support_living_context to check whether living_context is support
+b:jsruntimeEvalScriptInBrowserContext
+
+because we only implement browser interface using PyV8, so if PyV8 is not supported, this function will not exist, check existence before use
+
+// vim script
+if exists('b:jsruntimeEvalScriptInBrowserContext')
+    // do what you like
+endif
+sample
+
+:call b:jsruntimeEvalScriptInBrowserContext('<html><body onload="console.log(1+2);"><p></p></body></html>')
+//output 3
